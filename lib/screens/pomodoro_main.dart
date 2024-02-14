@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:pomodoro/util/constants.dart';
+import 'package:pomodoro/util/util_functions.dart';
 import 'package:pomodoro/widgets/task_list.dart';
 import '../models/task.dart';
 import 'package:pomodoro/widgets/timer_control_panel.dart';
@@ -40,7 +41,7 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
         setState(() => _time--);
       } else {
         _timer!.cancel();
-        _playAudio();
+        _playAudioGongo();
       }
     });
   }
@@ -78,6 +79,7 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
       _currentStateText = timeLimitsText.elementAt(s.index);
       _time = timeLimits.elementAt(s.index);
     });
+    _playAudioMovMenu();
   }
 
   void _incrementTime() {
@@ -98,8 +100,16 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
     });
   }
 
-  void _playAudio() async {
-    await player.play(AssetSource(gongoSound));
+  void _playAudioGongo() async {
+    _playAudio(gongoSound);
+  }
+
+  void _playAudioMovMenu() async {
+    _playAudio(movMenu);
+  }
+
+  void _playAudio(String whatSound) async {
+    await player.play(AssetSource(whatSound));
   }
 
   String _getTimeCounter() {
@@ -179,6 +189,7 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
                 timeCounter: _getTimeCounter(),
                 timer: _timer,
                 time: _time,
+                generalState: getGeneralState(_currentState, _timer, _time),
                 onStartTimer: _startTimer,
                 onStopTimer: _stopTimer,
                 onPauseTimer: _pauseTimer,

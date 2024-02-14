@@ -60,8 +60,9 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/audio/gongo1.mp3
-    - assets/audio/gongo2.mp3
+    - assets/audio/final.mp3
+    - assets/audio/mov_menu.mp3
+    
 
     - assets/images/yy_ok.png
     - assets/images/yy_sleeping.png
@@ -69,6 +70,7 @@ flutter:
     - assets/images/yy_sitting.png
     - assets/images/yy_smiling.png    
     - assets/images/yy_lunch.png
+    - assets/images/yy_iknow.png    
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

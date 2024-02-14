@@ -13,7 +13,7 @@ To create a Pomodoro timer app with task management capabilities, specifically d
 - [x] Add Pomodoro actions such as focus, short break, and long break.
 - [x] Refactor the TaskList widget.
 - [x] Refactor the TimerControl.
-- [ ] Create utility functions to control the flow and state of the running app, such as image transitions, enabling/disabling buttons, etc.
+- [ ] Create utility functions (event manager) to control the flow and state of the running app, such as image transitions, enabling/disabling buttons, etc. 
 - [ ] Further refactoring...
 - [ ] Adjust timing and control flow to adhere to the Pomodoro technique standards.
 - [ ] Add an option to configure the task list outside of the app window, or include SQLite to manage the tasks.

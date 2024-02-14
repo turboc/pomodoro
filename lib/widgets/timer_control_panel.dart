@@ -2,11 +2,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:pomodoro/util/constants.dart';
 
+
 class TimerControlPanel extends StatelessWidget {
   final String currentStateText;
   final String timeCounter;
   final Timer? timer;
   final int time;
+  final GeneralState generalState;
   final VoidCallback onStartTimer;
   final VoidCallback onStopTimer;
   final VoidCallback onPauseTimer;
@@ -18,6 +20,7 @@ class TimerControlPanel extends StatelessWidget {
     required this.timeCounter,
     required this.timer,
     required this.time,
+    required this.generalState,
     required this.onStartTimer,
     required this.onStopTimer,
     required this.onPauseTimer,
@@ -55,14 +58,30 @@ class TimerControlPanel extends StatelessWidget {
   }
 
   Widget _buildImageBasedOnTimerState() {
-    if (timer != null && timer!.isActive && time > 0) {
-      return Image.asset(imageCheering, width: 100);
-    } else if (timer != null && timer!.isActive && time == 0) {
-      return Image.asset(imageOk, width: 100);
-    } else if ((timer == null || !timer!.isActive) && time > 0) {
-      return Image.asset(imageSitting, width: 200);
-    } else {
-      return Image.asset(imageSleeping, width: 300);
+
+    switch(generalState) {
+      case GeneralState.focusRunning: {
+        return Image.asset(imageCheering, width: 150);
+      }
+      case GeneralState.focusPaused: {
+        return Image.asset(imageSitting, width: 200);
+      }
+      case GeneralState.focusStopped: {
+        return Image.asset(imageOk, width: 200);
+      }
+      case GeneralState.shortBreakRunning: {
+        return Image.asset(imageLunch, width: 200);
+      }
+      case GeneralState.longBreakRunning: {
+        return Image.asset(imageIknow, width: 200);
+      }
+      case GeneralState.shortBreakPaused:
+      case GeneralState.longBreakPaused: {
+        return Image.asset(imageSmiling, width: 200);
+      }
+
+      default:
+        return Image.asset(imageSleeping, width: 300);
     }
   }
 
