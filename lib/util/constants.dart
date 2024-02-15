@@ -1,6 +1,6 @@
 // apenas teste
 
-const increment = 10;
+const increment = 600;
 
 const String gongoSound = 'audio/final.mp3';
 const String movMenu = 'audio/mov_menu.mp3';
