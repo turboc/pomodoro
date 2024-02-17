@@ -62,7 +62,7 @@ flutter:
   assets:
     - assets/audio/final.mp3
     - assets/audio/mov_menu.mp3
-    
+    - assets/audio/panic.mp3
 
     - assets/images/yy_ok.png
     - assets/images/yy_sleeping.png

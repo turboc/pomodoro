@@ -101,7 +101,24 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   }
 
   void _playAudioGongo() async {
-    _playAudio(gongoSound);
+
+    switch(getGeneralState(_currentState, _timer, _time)) {
+      case GeneralState.focusStopped: {
+        _playAudio(gongoSound);
+        break;
+      }
+      case GeneralState.longBreakStopped:
+      case GeneralState.shortBreakStopped: {
+        _playAudio(panicGongoSound);
+        break;
+        
+      }
+      default: {
+        _playAudio(gongoSound);
+      }
+
+    }
+    
   }
 
   void _playAudioMovMenu() async {

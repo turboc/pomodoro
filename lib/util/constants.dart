@@ -3,7 +3,9 @@
 const increment = 600;
 
 const String gongoSound = 'audio/final.mp3';
+const String panicGongoSound = 'audio/panic.mp3';
 const String movMenu = 'audio/mov_menu.mp3';
+
 
 enum TimerState { focus, shortBreak, longBreak }
 
