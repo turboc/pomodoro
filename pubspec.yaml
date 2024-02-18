@@ -63,6 +63,9 @@ flutter:
     - assets/audio/final.mp3
     - assets/audio/mov_menu.mp3
     - assets/audio/panic.mp3
+    - assets/audio/stop.mp3
+    - assets/audio/start.mp3
+    - assets/audio/pause.wav
 
     - assets/images/yy_ok.png
     - assets/images/yy_sleeping.png
@@ -70,7 +73,9 @@ flutter:
     - assets/images/yy_sitting.png
     - assets/images/yy_smiling.png    
     - assets/images/yy_lunch.png
-    - assets/images/yy_iknow.png    
+    - assets/images/yy_iknow.png  
+    - assets/images/yy_floor.png  
+      
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

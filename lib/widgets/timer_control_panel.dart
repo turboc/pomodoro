@@ -80,6 +80,12 @@ class TimerControlPanel extends StatelessWidget {
         return Image.asset(imageSmiling, width: 200);
       }
 
+      case GeneralState.shortBreakStopped:
+      case GeneralState.longBreakStopped: {
+        return Image.asset(imageFloor, width: 200);
+      }
+      
+
       default:
         return Image.asset(imageSleeping, width: 300);
     }

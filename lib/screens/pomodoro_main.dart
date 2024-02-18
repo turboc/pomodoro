@@ -20,7 +20,8 @@ class PomodoroMainPage extends StatefulWidget {
 class _PomodoroMainPage extends State<PomodoroMainPage> {
   final FocusNode _focusNode = FocusNode();
 
-  int _time = 1 * 5;
+  int _time = timeLimits.elementAt(0);
+  bool _gongado = false;
   String _currentStateText = "Foco";
   TimerState _currentState = TimerState.focus;
 
@@ -30,23 +31,31 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   final TextEditingController _taskController = TextEditingController();
 
   void _startTimer() {
+    _playAudioStart();
     if (_timer != null) {
       _timer!.cancel();
     }
     if (_time == 0) {
       setState(() => _time = increment);
     }
+    _gongado = false;
+
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+
+      _canPlayGongo();
+
       if (_time > 0) {
         setState(() => _time--);
       } else {
         _timer!.cancel();
-        _playAudioGongo();
       }
     });
   }
 
   void _stopTimer() {
+
+    _playAudioStop();
+
     if (_timer != null) {
       setState(() {
         _timer!.cancel();
@@ -61,6 +70,9 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   }
 
   void _pauseTimer() {
+
+    _playAudioPause();
+
     if (_timer != null) {
       setState(() {
         _timer!.cancel();
@@ -100,30 +112,52 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
     });
   }
 
-  void _playAudioGongo() async {
-
-    switch(getGeneralState(_currentState, _timer, _time)) {
-      case GeneralState.focusStopped: {
-        _playAudio(gongoSound);
-        break;
-      }
-      case GeneralState.longBreakStopped:
-      case GeneralState.shortBreakStopped: {
-        _playAudio(panicGongoSound);
-        break;
-        
-      }
-      default: {
-        _playAudio(gongoSound);
-      }
-
+  void _canPlayGongo() {
+    if (_time < 2 && !_gongado) {
+      _playAudioGongo();
     }
-    
+  }
+
+  void _playAudioGongo() async {
+    _gongado = true;
+    switch (getGeneralState(_currentState, _timer, _time)) {
+      case GeneralState.focusStopped:
+      case GeneralState.focusRunning: 
+        {
+          _playAudio(gongoSound);
+          break;
+        }
+      case GeneralState.longBreakStopped:
+      case GeneralState.shortBreakStopped:
+      case GeneralState.longBreakRunning:
+      case GeneralState.shortBreakRunning:
+        {
+          _playAudio(panicGongoSound);
+          break;
+        }
+      default:
+        {
+          _playAudio(gongoSound);
+        }
+    }
   }
 
   void _playAudioMovMenu() async {
     _playAudio(movMenu);
   }
+
+
+  void _playAudioStop() async {
+    _playAudio(stopSound);
+  }
+
+  void _playAudioStart() async {
+    _playAudio(startSound);
+  }
+  void _playAudioPause() async {
+    _playAudio(pauseSound);
+  }
+
 
   void _playAudio(String whatSound) async {
     await player.play(AssetSource(whatSound));
