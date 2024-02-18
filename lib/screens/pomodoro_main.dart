@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:pomodoro/controllers/audio_controller.dart';
 import 'package:pomodoro/util/constants.dart';
 import 'package:pomodoro/util/util_functions.dart';
 import 'package:pomodoro/widgets/task_list.dart';
@@ -30,8 +31,12 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   final List<Task> _tasks = [];
   final TextEditingController _taskController = TextEditingController();
 
+  final AudioController _audioController = AudioController();
+
   void _startTimer() {
-    _playAudioStart();
+    
+    _audioController.playStart();
+
     if (_timer != null) {
       _timer!.cancel();
     }
@@ -54,7 +59,7 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
 
   void _stopTimer() {
 
-    _playAudioStop();
+    _audioController.playStop();
 
     if (_timer != null) {
       setState(() {
@@ -71,7 +76,7 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
 
   void _pauseTimer() {
 
-    _playAudioPause();
+    _audioController.playPause();
 
     if (_timer != null) {
       setState(() {
@@ -91,7 +96,7 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
       _currentStateText = timeLimitsText.elementAt(s.index);
       _time = timeLimits.elementAt(s.index);
     });
-    _playAudioMovMenu();
+    _audioController.playMovMenu();
   }
 
   void _incrementTime() {
@@ -121,46 +126,20 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   void _playAudioGongo() async {
     _gongado = true;
     switch (getGeneralState(_currentState, _timer, _time)) {
-      case GeneralState.focusStopped:
-      case GeneralState.focusRunning: 
-        {
-          _playAudio(gongoSound);
-          break;
-        }
       case GeneralState.longBreakStopped:
       case GeneralState.shortBreakStopped:
       case GeneralState.longBreakRunning:
       case GeneralState.shortBreakRunning:
         {
-          _playAudio(panicGongoSound);
+          _audioController.playPanicGongo();
           break;
         }
       default:
         {
-          _playAudio(gongoSound);
+          _audioController.playGongo();
+          
         }
     }
-  }
-
-  void _playAudioMovMenu() async {
-    _playAudio(movMenu);
-  }
-
-
-  void _playAudioStop() async {
-    _playAudio(stopSound);
-  }
-
-  void _playAudioStart() async {
-    _playAudio(startSound);
-  }
-  void _playAudioPause() async {
-    _playAudio(pauseSound);
-  }
-
-
-  void _playAudio(String whatSound) async {
-    await player.play(AssetSource(whatSound));
   }
 
   String _getTimeCounter() {
