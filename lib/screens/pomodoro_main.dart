@@ -27,7 +27,6 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   TimerState _currentState = TimerState.focus;
 
   Timer? _timer;
-  final player = AudioPlayer();
   final List<Task> _tasks = [];
   final TextEditingController _taskController = TextEditingController();
 
