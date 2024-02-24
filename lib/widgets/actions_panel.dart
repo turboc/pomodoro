@@ -1,6 +1,7 @@
 // actions_panel.dart
 
 import 'package:flutter/material.dart';
+import 'package:pomodoro/util/constants.dart';
 
 class ActionsPanel extends StatelessWidget {
   final VoidCallback onSelectFocus;
@@ -8,9 +9,7 @@ class ActionsPanel extends StatelessWidget {
   final VoidCallback onSelectLongBreak;
   final VoidCallback onDecrementTime;
   final VoidCallback onIncrementTime;
-  final bool isFocus;
-  final bool isShortBreak;
-  final bool isLongBreak;
+  final TimerState timerState;
 
   const ActionsPanel({
     Key? key,
@@ -19,13 +18,15 @@ class ActionsPanel extends StatelessWidget {
     required this.onSelectLongBreak,
     required this.onDecrementTime,
     required this.onIncrementTime,
-    required this.isFocus,
-    required this.isShortBreak,
-    required this.isLongBreak,
+    required this.timerState,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool isFocus = timerState == TimerState.focus;
+    bool isShortBreak = timerState == TimerState.shortBreak;
+    bool isLongBreak = timerState == TimerState.longBreak;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[

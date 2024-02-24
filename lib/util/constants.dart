@@ -15,7 +15,7 @@ enum TimerState { focus, shortBreak, longBreak }
 
 enum GeneralState { everyThingStopped, focusRunning, focusPaused, focusStopped, shortBreakRunning, shortBreakPaused, shortBreakStopped, longBreakRunning, longBreakPaused, longBreakStopped }
 
-const Set<int> timeLimits = {5, 6, 7}; //{1800, 600, 1200};
+const Set<int> timeLimits = {1800, 600, 1200}; //{5, 6, 7}
 
 
 const Set<String> timeLimitsText = {"Foco", "Intervalo breve", "Intervalo longo"};

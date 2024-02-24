@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:audioplayers/audioplayers.dart';
-import 'package:pomodoro/controllers/audio_controller.dart';
 import 'package:pomodoro/util/constants.dart';
-import 'package:pomodoro/util/util_functions.dart';
 import 'package:pomodoro/widgets/task_list.dart';
-import '../models/task.dart';
 import 'package:pomodoro/widgets/timer_control_panel.dart';
 import 'package:pomodoro/widgets/actions_panel.dart';
+import 'package:signals/signals_flutter.dart';
+import 'package:pomodoro/signals/timer_signals.dart' as ts;
+import '../models/task.dart';
 
 class PomodoroMainPage extends StatefulWidget {
   const PomodoroMainPage({super.key, required this.title});
@@ -21,131 +19,8 @@ class PomodoroMainPage extends StatefulWidget {
 class _PomodoroMainPage extends State<PomodoroMainPage> {
   final FocusNode _focusNode = FocusNode();
 
-  int _time = timeLimits.elementAt(0);
-  bool _gongado = false;
-  String _currentStateText = "Foco";
-  TimerState _currentState = TimerState.focus;
-
-  Timer? _timer;
   final List<Task> _tasks = [];
   final TextEditingController _taskController = TextEditingController();
-
-  final AudioController _audioController = AudioController();
-
-  void _startTimer() {
-    
-    _audioController.playStart();
-
-    if (_timer != null) {
-      _timer!.cancel();
-    }
-    if (_time == 0) {
-      setState(() => _time = increment);
-    }
-    _gongado = false;
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-
-      _canPlayGongo();
-
-      if (_time > 0) {
-        setState(() => _time--);
-      } else {
-        _timer!.cancel();
-      }
-    });
-  }
-
-  void _stopTimer() {
-
-    _audioController.playStop();
-
-    if (_timer != null) {
-      setState(() {
-        _timer!.cancel();
-        _timer = null;
-        _time = 0;
-      });
-    } else {
-      setState(() {
-        _time = 0;
-      });
-    }
-  }
-
-  void _pauseTimer() {
-
-    _audioController.playPause();
-
-    if (_timer != null) {
-      setState(() {
-        _timer!.cancel();
-        _timer = null;
-      });
-    }
-  }
-
-  void _resumeTimer() {
-    _startTimer();
-  }
-
-  void _selectState(TimerState s) {
-    setState(() {
-      _currentState = s;
-      _currentStateText = timeLimitsText.elementAt(s.index);
-      _time = timeLimits.elementAt(s.index);
-    });
-    _audioController.playMovMenu();
-  }
-
-  void _incrementTime() {
-    setState(() {
-      _time += increment;
-      if (_timer == null || !_timer!.isActive) {
-        _startTimer();
-      }
-    });
-  }
-
-  void _decrementTime() {
-    setState(() {
-      _time -= increment;
-      if (_time <= 0) {
-        _stopTimer();
-      }
-    });
-  }
-
-  void _canPlayGongo() {
-    if (_time < 2 && !_gongado) {
-      _playAudioGongo();
-    }
-  }
-
-  void _playAudioGongo() async {
-    _gongado = true;
-    switch (getGeneralState(_currentState, _timer, _time)) {
-      case GeneralState.longBreakStopped:
-      case GeneralState.shortBreakStopped:
-      case GeneralState.longBreakRunning:
-      case GeneralState.shortBreakRunning:
-        {
-          _audioController.playPanicGongo();
-          break;
-        }
-      default:
-        {
-          _audioController.playGongo();
-          
-        }
-    }
-  }
-
-  String _getTimeCounter() {
-    int minutes = _time ~/ 60;
-    int seconds = _time % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
 
   void _addTask(String title) {
     if (title.isNotEmpty) {
@@ -166,7 +41,6 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
 
   @override
   void dispose() {
-    _timer?.cancel();
     _taskController.dispose();
     _focusNode.dispose();
     super.dispose();
@@ -214,29 +88,31 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
             Expanded(
               flex: 3,
               child: TimerControlPanel(
-                currentStateText: _currentStateText,
-                timeCounter: _getTimeCounter(),
-                timer: _timer,
-                time: _time,
-                generalState: getGeneralState(_currentState, _timer, _time),
-                onStartTimer: _startTimer,
-                onStopTimer: _stopTimer,
-                onPauseTimer: _pauseTimer,
-                onResumeTimer: _resumeTimer,
+                currentStateText:
+                    ts.getCurrentStateText().watch(context),
+                timeCounter: ts.getTimeCounter().watch(context),
+                timer: ts.getTimer().watch(context),
+                time: ts.getTime().watch(context),
+                generalState:
+                    ts.getSignalGeneralState().watch(context),
+                onStartTimer: ts.startTimer,
+                onStopTimer: ts.stopTimer,
+                onPauseTimer: ts.pauseTimer,
+                onResumeTimer: ts.startTimer,
               ),
             ),
           ],
         ),
       ),
       floatingActionButton: ActionsPanel(
-        onSelectFocus: () => _selectState(TimerState.focus),
-        onSelectShortBreak: () => _selectState(TimerState.shortBreak),
-        onSelectLongBreak: () => _selectState(TimerState.longBreak),
-        onDecrementTime: _decrementTime,
-        onIncrementTime: _incrementTime,
-        isFocus: _currentState == TimerState.focus,
-        isShortBreak: _currentState == TimerState.shortBreak,
-        isLongBreak: _currentState == TimerState.longBreak,
+        onSelectFocus: () => ts.setSelectedState(TimerState.focus),
+        onSelectShortBreak: () =>
+            ts.setSelectedState(TimerState.shortBreak),
+        onSelectLongBreak: () =>
+            ts.setSelectedState(TimerState.longBreak),
+        onDecrementTime: ts.decrementTime,
+        onIncrementTime: ts.incrementTime,
+        timerState: ts.getTimerState().watch(context),
       ),
     );
   }
