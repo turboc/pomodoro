@@ -10,7 +10,6 @@ final Signal<String> timerStateText = signal("Foco");
 final Signal<Timer?> timer = signal(null);
 final AudioController audioController = AudioController();
 
-
 bool gongado = false;
 
 void _canPlayGongo() {
@@ -123,5 +122,3 @@ void setSelectedState(TimerState s) {
   time.set(timeLimits.elementAt(s.index));
   audioController.playMovMenu();
 }
-
-
