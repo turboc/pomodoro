@@ -4,7 +4,7 @@ import '../models/task.dart';
 class TaskList extends StatelessWidget {
   final List<Task> tasks;
   final Function(int) onRemove;
-  final Function(int) onToggleCompleted;
+  final Function(int, bool) onToggleCompleted;
 
   const TaskList({
     Key? key,
@@ -21,22 +21,26 @@ class TaskList extends StatelessWidget {
         final task = tasks[index];
         return ListTile(
           title: Text(
-            task.title,
+            '${task.id} - ${task.title}',
             style: TextStyle(
-              decoration: task.isCompleted ? TextDecoration.lineThrough : TextDecoration.none,
+              decoration: task.isCompleted
+                  ? TextDecoration.lineThrough
+                  : TextDecoration.none,
               color: task.isCompleted ? Colors.grey : null,
             ),
           ),
           leading: IconButton(
             icon: Icon(
-              task.isCompleted ? Icons.check_circle : Icons.radio_button_unchecked,
+              task.isCompleted
+                  ? Icons.check_circle
+                  : Icons.radio_button_unchecked,
               color: task.isCompleted ? Colors.green : null,
             ),
-            onPressed: () => onToggleCompleted(index),
+            onPressed: () => onToggleCompleted(task.id, !task.isCompleted),
           ),
           trailing: IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: () => onRemove(index),
+            onPressed: () => onRemove(task.id),
           ),
         );
       },
