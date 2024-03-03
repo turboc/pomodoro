@@ -34,8 +34,6 @@ void playAudioGongo() {
         audioController.playGongo();
       }
   }
-
-  audioController.playGongo();
 }
 
 void startTimer() {
@@ -54,25 +52,20 @@ void startTimer() {
     if (time.value > 0) {
       time.value = time.value - 1;
     } else {
-      timer.value!.cancel();
-      timer.value = null;
+      _disableTimer();
     }
   });
 }
 
 void stopTimer() {
   audioController.playStop();
-
-  timer.value?.cancel();
-  timer.value = null;
+  _disableTimer();
   time.value = 0;
 }
 
 void pauseTimer() {
   audioController.playPause();
-
-  timer.value?.cancel();
-  timer.value = null;
+  _disableTimer();
 }
 
 void incrementTime() {
@@ -87,6 +80,11 @@ void decrementTime() {
   if (time.value <= 0) {
     stopTimer();
   }
+}
+
+void _disableTimer() {
+  timer.value?.cancel();
+  timer.value = null;
 }
 
 Computed getTimeCounter() {

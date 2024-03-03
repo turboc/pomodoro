@@ -18,8 +18,8 @@ class PomodoroMainPage extends StatefulWidget {
 
 class _PomodoroMainPage extends State<PomodoroMainPage> {
   final FocusNode _focusNode = FocusNode();
-
   final List<Task> _tasks = [];
+
   final TextEditingController _taskController = TextEditingController();
 
   void _addTask(String title) {
@@ -88,13 +88,11 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
             Expanded(
               flex: 3,
               child: TimerControlPanel(
-                currentStateText:
-                    ts.getCurrentStateText().watch(context),
+                currentStateText: ts.getCurrentStateText().watch(context),
                 timeCounter: ts.getTimeCounter().watch(context),
                 timer: ts.getTimer().watch(context),
                 time: ts.getTime().watch(context),
-                generalState:
-                    ts.getSignalGeneralState().watch(context),
+                generalState: ts.getSignalGeneralState().watch(context),
                 onStartTimer: ts.startTimer,
                 onStopTimer: ts.stopTimer,
                 onPauseTimer: ts.pauseTimer,
@@ -106,10 +104,8 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
       ),
       floatingActionButton: ActionsPanel(
         onSelectFocus: () => ts.setSelectedState(TimerState.focus),
-        onSelectShortBreak: () =>
-            ts.setSelectedState(TimerState.shortBreak),
-        onSelectLongBreak: () =>
-            ts.setSelectedState(TimerState.longBreak),
+        onSelectShortBreak: () => ts.setSelectedState(TimerState.shortBreak),
+        onSelectLongBreak: () => ts.setSelectedState(TimerState.longBreak),
         onDecrementTime: ts.decrementTime,
         onIncrementTime: ts.incrementTime,
         timerState: ts.getTimerState().watch(context),
