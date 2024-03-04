@@ -1,19 +1,19 @@
 import 'package:hive/hive.dart';
 
-part 'task.g.dart'; // You need to generate this file using the command `flutter pub run build_runner build`
+part 'task.g.dart'; // `flutter pub run build_runner build`
 
 @HiveType(typeId: 0)
 class Task extends HiveObject {
-  @HiveField(0)
+  // Not a HiveField(0)
   int id;
 
-  @HiveField(1)
+  @HiveField(0)
   String title;
 
-  @HiveField(2)
+  @HiveField(1)
   bool isCompleted;
 
-  @HiveField(3)
+  @HiveField(2)
   DateTime createdAt;
 
   Task({

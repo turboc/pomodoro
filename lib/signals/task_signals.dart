@@ -11,17 +11,14 @@ Future<void> openBoxes() async {
 }
 
 void addTask(String title) async {
-  final task = Task(id: DateTime.now().millisecondsSinceEpoch, title: title);
+  final task = Task(id: 0, title: title);
   await taskBox.add(task);
   tasks.value = getAllTasks();
 }
 
 void removeTask(int id) async {
-  print('firing here');
-  print(id);
   await taskBox.delete(id);
   tasks.value = getAllTasks();
-  print(tasks);
 }
 
 void toggleTaskCompleted(int id, bool isCompleted) async {
@@ -34,7 +31,13 @@ void toggleTaskCompleted(int id, bool isCompleted) async {
 }
 
 List<Task> getAllTasks() {
-  return taskBox.values.toList();
+  List<Task> tasks = [];
+  for (int taskId in taskBox.keys) {
+    Task task = taskBox.get(taskId)!;
+    task.id = taskId;
+    tasks.add(task);
+  }
+  return tasks;
 }
 
 // computed

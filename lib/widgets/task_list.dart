@@ -20,14 +20,27 @@ class TaskList extends StatelessWidget {
       itemBuilder: (context, index) {
         final task = tasks[index];
         return ListTile(
-          title: Text(
-            '${task.id} - ${task.title}',
-            style: TextStyle(
-              decoration: task.isCompleted
-                  ? TextDecoration.lineThrough
-                  : TextDecoration.none,
-              color: task.isCompleted ? Colors.grey : null,
-            ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  task.title,
+                  style: TextStyle(
+                    decoration: task.isCompleted
+                        ? TextDecoration.lineThrough
+                        : TextDecoration.none,
+                    color: task.isCompleted ? Colors.grey : null,
+                  ),
+                ),
+              ),
+              Text(
+                '${task.createdAt.day}/${task.createdAt.month}/${task.createdAt.year} ${task.createdAt.hour}:${task.createdAt.minute}',
+                style: const TextStyle(
+                  color: Colors.grey,
+                ),
+              ),
+            ],
           ),
           leading: IconButton(
             icon: Icon(

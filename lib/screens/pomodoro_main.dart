@@ -21,6 +21,12 @@ class _PomodoroMainPage extends State<PomodoroMainPage> {
   final TextEditingController _taskController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    tks.tasks.value = tks.getAllTasks();
+  }
+
+  @override
   void dispose() {
     _taskController.dispose();
     _focusNode.dispose();
