@@ -10,16 +10,16 @@ final Signal<String> timerStateText = signal("Foco");
 final Signal<Timer?> timer = signal(null);
 final AudioController audioController = AudioController();
 
-bool gongado = false;
+bool _gongado = false;
 
 void _canPlayGongo() {
-  if (time.value < 2 && !gongado) {
+  if (time.value < 2 && !_gongado) {
     playAudioGongo();
   }
 }
 
 void playAudioGongo() {
-  gongado = true;
+  _gongado = true;
   switch (getGeneralState(timerState.value, timer.value, time.value)) {
     case GeneralState.longBreakStopped:
     case GeneralState.shortBreakStopped:
@@ -44,9 +44,9 @@ void startTimer() {
   if (time.value == 0) {
     time.value = increment;
   }
-  gongado = false;
+  _gongado = false;
 
-  timer.value = Timer.periodic(const Duration(seconds: 1), (t) {
+  timer.value = Timer.periodic(const Duration(seconds: 1), (_) {
     _canPlayGongo();
 
     if (time.value > 0) {
